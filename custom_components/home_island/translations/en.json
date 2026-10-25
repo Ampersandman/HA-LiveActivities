@@ -1,0 +1,161 @@
+{
+  "title": "Home Island",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Home Island",
+        "description": "Choose the iOS Companion App devices that receive your activities. Requires Core 2026.7+, iOS 17.2+, and a current Companion App. Test on your iPhone before replacing existing automations. Away from home, your phone must reach this Home Assistant server for the Live Activity token handshake.",
+        "data": {
+          "recipients": "iOS Companion notification actions"
+        }
+      }
+    },
+    "error": {
+      "invalid_recipients": "Select one or more currently available notify.mobile_app_* actions for your iOS devices.",
+      "no_mobile_devices": "No Companion notification actions are available. Connect the iOS Companion App to this server and enable notifications, then retry.",
+      "invalid_entity": "The entity does not exist. Select an existing entity.",
+      "invalid_states": "Provide at least one start state and one completion state; they must not overlap.",
+      "invalid_color": "Use a six-digit hex color, for example #2196F3.",
+      "invalid_range": "Enter a value within the allowed range; maximum must exceed minimum.",
+      "invalid_url": "Use a dashboard path beginning with /, an https:// URL, or homeassistant:// URL.",
+      "invalid_thresholds": "Enter a list such as [{\"value\": 80, \"color\": \"#4CAF50\"}].",
+      "activity_not_found": "This activity no longer exists.",
+      "integration_not_loaded": "Home Island is not loaded. Reload the integration before testing.",
+      "test_failed": "The test could not be submitted. Check Home Island diagnostics and the notification action."
+    },
+    "abort": {
+      "already_configured": "Home Island is already configured. Open its options to manage activities."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Manage Home Island",
+        "menu_options": {
+          "recipients": "Recipient iPhones / iPads",
+          "add": "Add tracked activity",
+          "edit": "Edit tracked activity",
+          "toggle": "Enable or disable activity",
+          "remove": "Remove tracked activity",
+          "test": "Test tracked activity"
+        }
+      },
+      "recipients": {
+        "title": "Recipient devices",
+        "description": "Choose notify.mobile_app_* actions for your iOS Companion devices. Known Android registrations are excluded; verify any unrecognized device before selecting it.",
+        "data": {
+          "recipients": "iOS Companion notification actions"
+        }
+      },
+      "basic": {
+        "title": "Activity  -  entity and preset (1 of 5)",
+        "description": "Choose an entity and a native Companion presentation. Companion controls the Lock Screen and Dynamic Island layout.",
+        "data": {
+          "entity_id": "Entity to monitor",
+          "name": "Activity name",
+          "preset": "Presentation preset",
+          "enabled": "Enabled"
+        }
+      },
+      "lifecycle": {
+        "title": "Activity  -  start and completion (2 of 5)",
+        "description": "Use the entity's raw state values, including capitalization. Default states are suggestions; adjust them for your appliance. For timer entities, active starts and idle completes.",
+        "data": {
+          "start_states": "Start states (comma separated)",
+          "end_states": "Completion states (comma separated)",
+          "icon": "Material Design icon"
+        }
+      },
+      "presentation": {
+        "title": "Activity  -  appearance (3 of 5)",
+        "description": "Colors apply where Companion supports them; Dynamic Island keeps system styling. Optional gauge thresholds use a YAML/JSON list of {value: 80, color: '#4CAF50'}. The critical severity label changes styling only; it does not send an Apple Critical Alert.",
+        "data": {
+          "subtitle": "Subtitle / status text",
+          "accent_color": "Accent / icon color (#RRGGBB)",
+          "text_color": "Text color (#RRGGBB)",
+          "background_color": "Background color (#RRGGBB)",
+          "progress_color": "Progress color (#RRGGBB)",
+          "url": "Dashboard URL",
+          "relevance_score": "Relevance (0-1; Companion beta)",
+          "severity": "Alert severity",
+          "thresholds": "Gauge thresholds",
+          "critical_text": "Compact status text (critical_text)",
+          "progress_bar_direction": "Progress direction"
+        }
+      },
+      "sources": {
+        "title": "Activity  -  progress and countdown (4 of 5)",
+        "description": "Leave an entity blank to read its attribute from the monitored entity. A timer automatically uses finishes_at while active. Remaining time accepts seconds or H:MM:SS; ETA accepts a timestamp. Steps uses the progress source as the current step.",
+        "data": {
+          "progress_entity": "Progress / gauge / current-step entity",
+          "progress_attribute": "Progress attribute (blank = entity state)",
+          "progress_min": "Minimum progress / gauge value",
+          "progress_max": "Maximum progress / gauge value",
+          "remaining_entity": "Remaining-time entity (seconds / duration)",
+          "remaining_attribute": "Remaining-time attribute",
+          "eta_entity": "ETA entity (timestamp)",
+          "eta_attribute": "ETA attribute",
+          "subtitle_entity": "Subtitle entity",
+          "subtitle_attribute": "Subtitle attribute",
+          "step_total": "Total steps"
+        }
+      },
+      "timing": {
+        "title": "Activity  -  update and completion policy (5 of 5)",
+        "description": "Updates are event driven. A 60-second minimum and 5 percentage-point threshold reduce notification use; start, status, and completion changes remain important. Keep leaves the completion visible until platform expiration; dismiss sends clear_notification after the delay.",
+        "data": {
+          "min_update_interval": "Minimum update interval (seconds)",
+          "debounce_seconds": "Debounce rapid changes (seconds)",
+          "change_threshold": "Minimum progress change (percentage points)",
+          "completion_delay": "Completion display delay (seconds)",
+          "completion_behavior": "When complete",
+          "finish_at_eta": "Complete automatically at countdown ETA"
+        }
+      },
+      "edit": {
+        "title": "Edit an activity",
+        "data": {
+          "activity_id": "Tracked activity"
+        }
+      },
+      "toggle": {
+        "title": "Enable or disable an activity",
+        "description": "Select an activity to toggle its enabled state. Disabled activities are not monitored.",
+        "data": {
+          "activity_id": "Tracked activity"
+        }
+      },
+      "remove": {
+        "title": "Remove an activity",
+        "description": "Select an activity to remove its tracker. This does not change the monitored entity or your automations.",
+        "data": {
+          "activity_id": "Tracked activity"
+        }
+      },
+      "test": {
+        "title": "Test an activity",
+        "description": "Send a short-lived preview to the configured recipients. Physical display and delivery must be verified on your iPhone.",
+        "data": {
+          "activity_id": "Tracked activity"
+        }
+      }
+    },
+    "error": {
+      "invalid_recipients": "Select one or more currently available notify.mobile_app_* actions for your iOS devices.",
+      "no_mobile_devices": "No Companion notification actions are available. Connect the iOS Companion App to this server and enable notifications, then retry.",
+      "invalid_entity": "The entity does not exist. Select an existing entity.",
+      "invalid_states": "Provide at least one start state and one completion state; they must not overlap.",
+      "invalid_color": "Use a six-digit hex color, for example #2196F3.",
+      "invalid_range": "Enter a value within the allowed range; maximum must exceed minimum.",
+      "invalid_url": "Use a dashboard path beginning with /, an https:// URL, or homeassistant:// URL.",
+      "invalid_thresholds": "Enter a list such as [{\"value\": 80, \"color\": \"#4CAF50\"}].",
+      "activity_not_found": "This activity no longer exists.",
+      "integration_not_loaded": "Home Island is not loaded. Reload the integration before testing.",
+      "test_failed": "The test could not be submitted. Check Home Island diagnostics and the notification action.",
+      "invalid_config": "Some settings are invalid. Check the numeric ranges and activity configuration."
+    },
+    "abort": {
+      "test_sent": "The test was submitted to your Companion notification actions. Check your iPhone; submission does not confirm delivery."
+    }
+  }
+}

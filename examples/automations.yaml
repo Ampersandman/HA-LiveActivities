@@ -1,0 +1,82 @@
+# Paste individual automations into HA, adapting your entity IDs.
+# Use either UI tracking OR manual automations for a cycle, to avoid two activities.
+- alias: Home Island EV charging example
+  triggers:
+    - trigger: state
+      entity_id: sensor.ev_charge_state
+      to: charging
+  actions:
+    - action: home_island.start
+      data:
+        activity_id: ev_charge
+        title: EV charging
+        message: Charging
+        preset: gauge
+        icon: mdi:ev-station
+        progress: "{{ states('sensor.ev_battery') | float(0) }}"
+        progress_min: 0
+        progress_max: 100
+        progress_color: '#4CAF50'
+        url: /lovelace/garage
+
+- alias: Home Island EV progress example
+  triggers:
+    - trigger: state
+      entity_id: sensor.ev_battery
+  conditions:
+    - condition: state
+      entity_id: sensor.ev_charge_state
+      state: charging
+  actions:
+    - action: home_island.update
+      data:
+        activity_id: ev_charge
+        progress: "{{ states('sensor.ev_battery') | float(0) }}"
+
+- alias: Home Island EV completion example
+  triggers:
+    - trigger: state
+      entity_id: sensor.ev_charge_state
+      to: complete
+  actions:
+    - action: home_island.update
+      data:
+        activity_id: ev_charge
+        message: Ready to drive
+        progress: 100
+    - action: home_island.end
+      data:
+        activity_id: ev_charge
+        immediate: false
+
+- alias: Home Island countdown example
+  triggers:
+    - trigger: state
+      entity_id: input_button.tea
+  actions:
+    - action: home_island.start
+      data:
+        activity_id: tea
+        title: Tea timer
+        preset: countdown
+        message: Steeping
+        remaining_seconds: 180
+        finish_at_eta: true
+        completion_delay: 15
+
+- alias: Home Island alert example
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.water_leak
+      to: 'on'
+  actions:
+    - action: home_island.start
+      data:
+        activity_id: leak
+        title: Utility room
+        preset: alert
+        severity: warning
+        message: Water detected
+        critical_text: Leak
+        icon: mdi:water-alert
+        url: /lovelace/security

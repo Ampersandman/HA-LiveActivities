@@ -1,0 +1,9 @@
+.build/
+.swiftpm/
+build/
+xtool/
+Generated/
+*.xcodeproj/
+*.xcworkspace/
+*.mobileprovision
+*.p8

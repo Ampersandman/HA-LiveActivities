@@ -1,0 +1,168 @@
+start:
+  name: Start activity
+  description: Start a native Companion Live Activity. Reusing an active ID updates its tag. Recipients default to integration options.
+  fields: &activity_fields
+    activity_id:
+      name: Activity ID
+      description: Stable ID shared by start, update and end actions. Use a different ID for each simultaneous activity.
+      required: true
+      example: washer
+      selector: {text: {}}
+    title:
+      name: Title
+      description: Activity title. Kept stable while running for Companion compatibility.
+      selector: {text: {}}
+    message:
+      name: Status
+      description: Status or step description. A chronometer can replace this area in the native layout.
+      selector: {text: {multiline: true}}
+    preset:
+      name: Presentation
+      description: Native layout preset. Gauge and steps use a progress bar approximation.
+      selector:
+        select:
+          options: [generic, countdown, gauge, alert, steps]
+    recipients:
+      name: Companion recipients
+      description: Optional notify.mobile_app_* action names. Omit to use configured recipients.
+      example: [notify.mobile_app_iphone]
+      selector: {object: {}}
+    progress:
+      name: Current value
+      description: Progress value, gauge reading, or current step number.
+      selector: {number: {min: -1000000000, max: 1000000000, mode: box, step: any}}
+    progress_min:
+      name: Gauge minimum
+      description: Minimum gauge value; defaults to zero.
+      selector: {number: {min: -1000000000, max: 1000000000, mode: box, step: any}}
+    progress_max:
+      name: Maximum
+      description: Maximum progress or gauge value; defaults to 100.
+      selector: {number: {min: -1000000000, max: 1000000000, mode: box, step: any}}
+    step_total:
+      name: Total steps
+      description: Number of steps for the steps preset; defaults to 5.
+      selector: {number: {min: 1, max: 10000, mode: box}}
+    remaining_seconds:
+      name: Remaining seconds
+      description: Sets an absolute device-side countdown deadline without per-second pushes.
+      selector: {number: {min: 0, max: 2592000, mode: box}}
+    when:
+      name: Absolute deadline
+      description: Unix timestamp in seconds. Prefer remaining_seconds for a relative duration.
+      selector: {number: {min: 1, max: 9999999999, mode: box}}
+    finish_at_eta:
+      name: Finish at deadline
+      description: Complete automatically when the countdown reaches zero. Defaults true for countdown preset.
+      selector: {boolean: {}}
+    critical_text:
+      name: Compact text
+      description: Short Dynamic Island text; this does not request a critical alert.
+      selector: {text: {}}
+    silent:
+      name: Quiet updates
+      description: Quiet subsequent updates. Companion may still alert on the initial start.
+      selector: {boolean: {}}
+    alert_once:
+      name: Alert only once
+      description: Defaults true. Quiet updates can be delayed or batched by iOS.
+      selector: {boolean: {}}
+    icon:
+      name: Icon
+      description: Material Design icon such as mdi:washing-machine.
+      selector: {icon: {}}
+    accent_color:
+      name: Icon accent
+      description: Hex color in quoted #RRGGBB format.
+      selector: {text: {}}
+    background_color:
+      name: Background color
+      description: Lock Screen background in quoted #RRGGBB format. Dynamic Island uses system styling.
+      selector: {text: {}}
+    text_color:
+      name: Text color
+      description: Text color in quoted #RRGGBB format.
+      selector: {text: {}}
+    progress_color:
+      name: Progress color
+      description: Progress bar color in quoted #RRGGBB format.
+      selector: {text: {}}
+    progress_bar_direction:
+      name: Progress direction
+      description: Increasing or decreasing progress rendering.
+      selector: {select: {options: [increasing, decreasing]}}
+    severity:
+      name: Alert severity
+      description: Visual severity only; no critical-alert entitlement or budget bypass.
+      selector: {select: {options: [info, warning, critical]}}
+    relevance_score:
+      name: Relevance
+      description: Relative importance from zero to one. Companion support is currently beta.
+      selector: {number: {min: 0, max: 1, step: 0.05, mode: box}}
+    url:
+      name: Dashboard link
+      description: Home Assistant dashboard path or URL opened when tapped.
+      example: /lovelace/laundry
+      selector: {text: {}}
+    min_update_interval:
+      name: Minimum update interval
+      description: Seconds between cosmetic updates; defaults to 60. Lifecycle and meaningful status transitions take priority.
+      selector: {number: {min: 0, max: 86400, mode: box}}
+    debounce_seconds:
+      name: Debounce
+      description: Coalesce a rapid burst into its latest state; defaults to 2 seconds.
+      selector: {number: {min: 0, max: 60, step: 0.1, mode: box}}
+    change_threshold:
+      name: Progress threshold
+      description: Minimum percentage-point change from the last accepted payload; defaults to 5.
+      selector: {number: {min: 0, max: 100, step: 0.1, mode: box}}
+    completion_delay:
+      name: Completion display delay
+      description: Seconds to show final status before clear_notification; defaults to 10.
+      selector: {number: {min: 0, max: 14400, mode: box}}
+    completion_behavior:
+      name: Completion behavior
+      description: Dismiss after the delay or keep until the activity lifetime limit.
+      selector: {select: {options: [dismiss, keep]}}
+    thresholds:
+      name: Gauge color thresholds
+      description: 'Optional list of value and color mappings, for example [{value: 80, color: "#4CAF50"}].'
+      selector: {object: {}}
+update:
+  name: Update activity
+  description: Merge fields into an existing manual activity, retaining its tag, recipients, and countdown deadline. Cosmetic changes are throttled.
+  fields: *activity_fields
+end:
+  name: End activity
+  description: Dismiss a manual activity using clear_notification, or first show the final status for its configured delay.
+  fields:
+    activity_id:
+      name: Activity ID
+      description: The same ID used when starting the activity.
+      required: true
+      selector: {text: {}}
+    immediate:
+      name: Dismiss immediately
+      description: When false, display the last supplied message as the completion status before dismissing.
+      default: true
+      selector: {boolean: {}}
+test:
+  name: Test activity
+  description: Send a sample activity to configured recipients. It completes after 30 seconds, then dismisses after the completion delay.
+  fields:
+    activity_id:
+      name: Test ID
+      description: Optional stable ID; defaults to home_island_test.
+      selector: {text: {}}
+    recipients:
+      name: Companion recipients
+      description: Optional notify.mobile_app_* action names; configured recipients are used by default.
+      selector: {object: {}}
+    title:
+      name: Title
+      description: Optional test title.
+      selector: {text: {}}
+    preset:
+      name: Presentation
+      description: Choose a native preset to test.
+      selector: {select: {options: [generic, countdown, gauge, alert, steps]}}

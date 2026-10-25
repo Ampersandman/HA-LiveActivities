@@ -1,0 +1,10 @@
+# Shape verified against xtool's PackSchema.swift and DemoExtensions example.
+# Replace these example identifiers before signing for your own device.
+version: 1
+bundleID: org.example.homeisland
+product: HomeIslandApp
+infoPath: Support/App-Info.plist
+extensions:
+  - product: HomeIslandWidgets
+    bundleID: org.example.homeisland.widgets
+    infoPath: Support/Widgets-Info.plist
